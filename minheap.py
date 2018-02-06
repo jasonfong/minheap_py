@@ -23,6 +23,7 @@ class MinHeap(object):
 
     Attributes:
         debug: A boolean indicating if debug output should be printed out.
+        data: Array representation of a binary tree min-heap.
     """
 
     def __init__(self, debug=False):
