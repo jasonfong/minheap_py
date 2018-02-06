@@ -6,25 +6,85 @@ class MinHeapError(Exception):
 
 
 class MinHeap(object):
+    """Implementation of a min-heap.
+
+    You should probably use heapq if you want a min-heap.
+    But here's what you could do if you wanted to do it yourself.
+
+    Min-heap data is contained in a complete binary tree represented
+    as an array. Organization of the array is from root level to leaf
+    level, with each level's nodes listed left to right.
+
+    Values stored are floats. Inputs are accepted as either a number or
+    a string that can be parsed to a float.
+
+    Navigating through the tree structure is done by calculating
+    array indexes to find the parent or children nodes.
+
+    Attributes:
+        debug: A boolean indicating if debug output should be printed out.
+    """
+
     def __init__(self, debug=False):
+        """Creates an empty min-heap.
+
+        Creates a new min-heap with an empty data array.
+        Optionally enable a debug mode that will output details of operations.
+
+        Args:
+            debug: A boolean indicating if debug output should be printed out.
+
+        Returns:
+            A new empty min-heap.
+        """
         self.debug = debug
         self.data = []
 
     def clear(self):
+        """Clears the contents of the min-heap.
+
+        Returns:
+            None
+        """
         self.data = []
 
     def push(self, value):
+        """Adds a value or a list of values to the min-heap.
+
+        Adds one or more values to the min-heap and maintains
+        node organization properties of a min-heap. Values should be able
+        to be converted to a float.
+
+        Args:
+            value: A single value or a list of values.
+
+        Returns:
+            None
+
+        Raises:
+            ValueError: Pushed value could not be converted to a float.
+        """
         if isinstance(value, list):
             for item in value:
                 self.push(item)
         else:
+            insert_val = float(value)
             if self.debug:
-                print "pushing value: %s" % value
+                print "pushing value: %s" % insert_val
 
-            self.data.append(value)
+            self.data.append(insert_val)
             self._bubble_up(len(self.data) - 1)
 
     def pop(self):
+        """Removes and returns the minimum value from the min-heap.
+
+        Removes and returns the minimum value from the min-heap. If multiple
+        copies of the minimum value exists in the min-heap, only one will be
+        removed. Maintains node organization properties of a min-heap.
+
+        Returns:
+            The minimum value in the min-heap.
+        """
         size = len(self.data)
 
         if size == 0:
@@ -71,6 +131,18 @@ class MinHeap(object):
         self._set_value(idx2, temp)
 
     def _bubble_up(self, idx):
+        """Move a node up to its proper position in a min-heap.
+
+        Swaps the node at index idx with its parent node if the value of the
+        node at idx is less than the value of the parent node. If the nodes
+        were swapped, repeat this on the parent node.
+
+        Use this to maintain the min-heap property after a node is pushed
+        into the min-heap and added to the bottom of the tree.
+
+        Returns:
+            None
+        """
         if self.debug:
             print str(self)
             print "bubbling up index: %s" % idx
@@ -85,6 +157,18 @@ class MinHeap(object):
             self._bubble_up(parent_idx)
 
     def _bubble_down(self, idx):
+        """Move a node down to its proper position in a min-heap.
+
+        Swaps the node at index idx with its smaller child node if the value
+        of the node at idx is greater than the value of the smaller child node.
+        If the nodes were swapped, repeat this on the smaller child node.
+
+        Use this to maintain the min-heap property after the root (minimum)
+        value is popped and the last node is moved to the root.
+
+        Returns:
+            None
+        """
         if self.debug:
             print str(self)
             print "bubbling down index: %s" % idx
@@ -112,6 +196,14 @@ class MinHeap(object):
             self._bubble_down(smaller_idx)
 
     def __str__(self):
+        """Create a string representation of the min-heap.
+
+        The string representation is in the form of left-aligned
+        outputs of the values of nodes in each level of the tree.
+
+        Returns:
+            String representation of the min-heap.
+        """
         if len(self.data) == 0:
             return ""
 
